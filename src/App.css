@@ -11,7 +11,7 @@ color: #000 !important;
     max-width: 400px;
     margin: 10px auto;
 }
-.input-field input[type=text]:focus {
+input[type=text]:focus {
     border-bottom: 1px solid rgb(124, 167, 248) !important;
     box-shadow: 0 1px 0 0 rgb(124, 167, 248)  !important;
 }
@@ -19,3 +19,18 @@ color: #000 !important;
     border-bottom: 1px solid rgb(124, 167, 248) !important;
     box-shadow: 0 1px 0 0 rgb(124, 167, 248)  !important;
 }
+.home-card {
+    max-width: 700px;
+    margin: 28px auto;
+}
+.message{
+    
+    font-size: large;
+    padding-bottom: 40px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+.home-card h5 {
+    padding:20px 40px;
+    color:  rgb(60, 83, 124);
+} 
