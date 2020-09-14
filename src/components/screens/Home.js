@@ -9,8 +9,8 @@ const Home = ()=>{
 <h4>title</h4>
 <p>hello this is the body please take a look and let me know if you like it....</p>
 <div className="row">
-<input class="col s10" type="text"placeholder="send a reply...."/>
-<i class="material-icons col s2">send</i>
+<input className="col s10" type="text"placeholder="send a reply...."/>
+<i className="material-icons col s2">send</i>
 </div>
 </div>
 </div>

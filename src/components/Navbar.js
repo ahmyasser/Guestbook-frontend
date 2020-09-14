@@ -8,10 +8,12 @@ const Navbar = ()=>{
       <div className="nav-wrapper grey lighten-5">
         <Link to="/" className="brand-logo left">Guestbook</Link>
         <ul id="nav-mobile" className="right ">
-          <li><Link to="/login">Login</Link></li>
+        <li><Link to="/profile">MyMessages</Link></li>
+        <li><Link to="/new-message">Create</Link></li>
+        <li><Link to="/login">Login</Link></li>
           <li><Link to="/signup">Signup</Link></li>
-          <li><Link to="/profile">Myposts</Link></li>
-        </ul>
+
+          </ul>
       </div>
     </nav>
     );
