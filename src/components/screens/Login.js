@@ -1,8 +1,9 @@
-import React,{useState} from 'react';
-import {Link,useHistory} from 'react-router-dom';
-import M from 'materialize-css';
-
-const Login = ()=>{
+import React,{useState,useContext,} from 'react'
+import {Link,useHistory} from 'react-router-dom'
+import {UserContext} from '../../App'
+import M from 'materialize-css'
+const Login  = ()=>{
+    const {dispatch} = useContext(UserContext)
     const history = useHistory()
     const [password,setPasword] = useState("")
     const [email,setEmail] = useState("")
@@ -29,6 +30,7 @@ const Login = ()=>{
            else{
                localStorage.setItem("jwt",data.token)
                localStorage.setItem("user",JSON.stringify(data.user))
+               dispatch({type:"USER",payload:data.user})
                M.toast({html:"signedin success",classes:"#43a047 green darken-1"})
                history.push('/')
            }
@@ -36,37 +38,38 @@ const Login = ()=>{
             console.log(err)
         })
     }
-    return(
-        <div className="mycard">
-        <div className="card auth-card input-field">
-          <h2>Guestbook</h2>
-          <input
-          type="text"
-          placeholder="email"
-          value={email}
-          onChange={(e)=>setEmail(e.target.value)}
-          />
-          <input
-          type="password"
-          placeholder="password"
-          value={password}
-          onChange={(e)=>setPasword(e.target.value)}
-          />
-          <button className="btn waves-effect waves-light #64b5f6 blue darken-1"
-          onClick={()=>PostData()}
-          >
-              Login
-          </button>
-          <h5>
-              <Link to="/signup">Signup</Link>
-          </h5>
-          <h6>
-              <Link to="/reset">Forgot password</Link>
-          </h6>
-  
+   return (
+      <div className="mycard">
+          <div className="card auth-card input-field">
+            <h2>Instagram</h2>
+            <input
+            type="text"
+            placeholder="email"
+            value={email}
+            onChange={(e)=>setEmail(e.target.value)}
+            />
+            <input
+            type="password"
+            placeholder="password"
+            value={password}
+            onChange={(e)=>setPasword(e.target.value)}
+            />
+            <button className="btn waves-effect waves-light #64b5f6 blue darken-1"
+            onClick={()=>PostData()}
+            >
+                Login
+            </button>
+            <h5>
+                <Link to="/signup">Dont have an account ?</Link>
+            </h5>
+            <h6>
+                <Link to="/reset">Forgot password ?</Link>
+            </h6>
+    
+        </div>
       </div>
-    </div>
-    );
+   )
 }
+
 
 export default Login;
