@@ -1,4 +1,5 @@
 import React,{useState, useEffect} from 'react';
+//import { Link } from 'react-router-dom';
 const Home = ()=>{
     const [data,setData] = useState([])
     useEffect(()=>{
@@ -12,6 +13,33 @@ const Home = ()=>{
        })
     },[]);
 
+    const reply = (text,postId)=>{
+    fetch('/reply',{
+        method:"put",
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization":"Bearer "+localStorage.getItem("jwt")
+            },
+            body:JSON.stringify({
+                postId,
+                text
+            })
+        }).then(res=>res.json())
+        .then(result=>{
+            console.log(result)
+            const newData = data.map(item=>{
+              if(item._id===result._id){
+                  return result
+              }else{
+                  return item
+              }
+           })
+          setData(newData)
+        }).catch(err=>{
+            console.log(err)
+        })
+  }
+
     return(
 <div className="home">
 {
@@ -22,10 +50,12 @@ const Home = ()=>{
 <div className="message">
 <h4>{item.title}</h4>
 <p>{item.body}</p>
-<div className="row">
-<input className="col s10" type="text"placeholder="send a reply...."/>
-<i className="material-icons col s2">send</i>
-</div>
+<form onSubmit={(e)=>{
+    e.preventDefault()
+    reply(e.target[0].value,item._id)
+}}>
+<input className="col s10" type="text" placeholder="send a reply...."/>
+</form>
 </div>
 </div>)})}
 </div>    

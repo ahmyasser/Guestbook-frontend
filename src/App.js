@@ -23,7 +23,7 @@ const Routing = ()=>{
       if(!history.location.pathname.startsWith('/reset'))
            history.push('/login')
     }
-  },[])
+  },[]);
   return(
     <Switch>
       <Route exact path="/" >
