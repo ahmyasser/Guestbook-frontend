@@ -1,14 +1,26 @@
 import React, {useContext} from 'react';
-import {Link} from 'react-router-dom'
+import {Link ,useHistory} from 'react-router-dom';
 import { UserContext } from '../App';
 
 const Navbar = ()=>{
-  const {state} = useContext(UserContext);
+  const {state,dispatch} = useContext(UserContext)
+  const history = useHistory()
   const renderList = ()=>{
     if(state){
         return [
           <li  key="1"><Link  to="/profile">MyMessages</Link></li>,
-          <li  key="2"><Link to="/new-message">Create</Link></li>
+          <li  key="2"><Link to="/new-message">Create</Link></li>,
+          <li  key="5">
+          <Link
+         onClick={()=>{
+           localStorage.clear()
+           dispatch({type:"CLEAR"})
+           history.push('/login')
+         }}
+         >
+             Logout
+         </Link>
+         </li>
         ]
     }else{
       return [
