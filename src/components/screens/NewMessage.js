@@ -1,8 +1,37 @@
-import React from 'react';
+import React ,{useState}  from 'react';
+import M from 'materialize-css'
+import {useHistory} from 'react-router-dom'
+const NewMessage= ()=> {
+    const history = useHistory()
+    const [title,setTitle] = useState("")
+    const [body,setBody] = useState("")
+    const postData=()=>{
+    fetch("/post",{
+        method:"post",
+        headers:{
+            "Content-Type":"application/json",
+            "Authorization":"Bearer "+localStorage.getItem("jwt")
+        },
+        body:JSON.stringify({
+            title,
+            body,
+        })
+    }).then(res=>res.json())
+    .then(data=>{
+       if(data.error){
+          M.toast({html: data.error,classes:"#c62828 red darken-3"})
+       }
+       else{
+           M.toast({html:"Created post Successfully",classes:"#43a047 green darken-1"})
+           history.push('/')
+       }
+    }).catch(err=>{
+        console.log(err)
+    })
 
-const NewMessage= ()=>{
-
- return(
+}
+ 
+return(
        <div className="card input-filed"
        style={{
            margin:"30px auto",
@@ -13,23 +42,23 @@ const NewMessage= ()=>{
            <input 
            type="text"
             placeholder="title"
-            //value={title}
-            //onChange={(e)=>setTitle(e.target.value)}
+            value={title}
+            onChange={(e)=>setTitle(e.target.value)}
             />
            <input
             type="text"
-             placeholder="body"
-             //value={body}
-            //onChange={(e)=>setBody(e.target.value)}
+            placeholder="body"
+            value={body}
+            onChange={(e)=>setBody(e.target.value)}
              />
             <button className="btn waves-effect waves-light #64b5f6 blue darken-1"
-            //onClick={()=>postDetails()}
+            onClick={()=>postData()}
             >
                 Send Message
             </button>
 
        </div>
    )
-}
 
+    }
 export default NewMessage;
