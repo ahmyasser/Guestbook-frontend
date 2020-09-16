@@ -7,7 +7,6 @@ import Login from './components/screens/Login';
 import Signup from './components/screens/Signup';
 import NewMessage from './components/screens/NewMessage';
 import {reducer,initialState} from './reducers/userReducer';
-import Profile from './components/screens/Profile';
 
 export const UserContext = createContext();
 
@@ -35,9 +34,6 @@ const [message,setMessage] = useState({});
       </Route>
       <Route path="/signup">
         <Signup />
-      </Route>
-      <Route message={message} exact path="/profile">
-        <Profile />
       </Route>
       <Route path="/new-message">
         <NewMessage/>
