@@ -1,4 +1,4 @@
-import React,{useEffect,createContext,useReducer,useContext, useState} from 'react';
+import React,{useEffect,createContext,useReducer,useContext} from 'react';
 import NavBar from './components/Navbar';
 import "./App.css";
 import {BrowserRouter,Route,Switch,useHistory} from 'react-router-dom';
@@ -13,7 +13,6 @@ export const UserContext = createContext();
 const Routing = ()=>{
   const history = useHistory()
   const {dispatch} = useContext(UserContext)
-const [message,setMessage] = useState({});
   
   useEffect(()=>{
     const user = JSON.parse(localStorage.getItem("user"))
@@ -27,7 +26,7 @@ const [message,setMessage] = useState({});
   return(
     <Switch>
       <Route exact path="/" >
-      <Home passMessage={setMessage}/>
+      <Home />
       </Route>
       <Route path="/login">
         <Login />
