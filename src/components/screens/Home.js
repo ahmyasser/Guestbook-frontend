@@ -1,10 +1,46 @@
 import React,{useState, useEffect, useContext} from 'react';
 import {UserContext} from '../../App'
-import { Link } from 'react-router-dom';
+import M from 'materialize-css';
+import Message from './Message';
 const Home = ()=>{
     const [data,setData] = useState([]);
-    const [messageReply,setReply] = useState("")
-    const {state} = useContext(UserContext)
+    const {state} = useContext(UserContext);
+    const [title,setTitle] = useState("")
+    const [body,setBody] = useState("")
+    const updateMessage=(message)=>{
+       
+    fetch(`/post/${message._id}`,{
+        method:"put",
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization":"Bearer "+localStorage.getItem("jwt")
+            },
+            body:JSON.stringify({
+                title,
+                body
+            })
+        }).then(res=>res.json())
+    .then(result=>{
+       if(result.error){
+          M.toast({html: result.error,classes:"#c62828 red darken-3"})
+       }
+       else{
+           M.toast({html:"Updated Successfully",classes:"#43a047 green darken-1"});
+           const newData = data.map(item=>{
+            if(item._id===result._id){
+                return result
+            }else{
+                return item
+            }
+         })
+        setData(newData);
+        }
+    }).catch(err=>{
+        console.log(err)
+    })
+    
+}
+
     useEffect(()=>{
        fetch('/posts',{
            headers:{
@@ -16,32 +52,6 @@ const Home = ()=>{
        })
     },[]);
 
-    const reply = (text,postId)=>{
-    fetch('/reply',{
-        method:"put",
-            headers:{
-                "Content-Type":"application/json",
-                "Authorization":"Bearer "+localStorage.getItem("jwt")
-            },
-            body:JSON.stringify({
-                postId,
-                text
-            })
-        }).then(res=>res.json())
-        .then(result=>{
-            console.log(result)
-            const newData = data.map(item=>{
-              if(item._id===result._id){
-                  return result
-              }else{
-                  return item
-              }
-           })
-          setData(newData)
-        }).catch(err=>{
-            console.log(err)
-        })
-  }
   const deleteMessage = (messageid)=>{
     fetch(`/post/${messageid}`,{
         method:"delete",
@@ -50,46 +60,19 @@ const Home = ()=>{
         }
     }).then(res=>res.json())
     .then(result=>{
-        console.log(result)
         const newData = data.filter(item=>{
             return item._id !== result._id
         })
         setData(newData)
     })
 }
-
     return(
 <div className="home">
 {
     data.map(item=>{
         return(
-<div className="card home-card" key={item._id}>
-<h5 style={{padding:"5px"}}><Link to={item.postedBy._id !== state._id?"/profile/"+item.postedBy._id :"/profile"  }>{item.postedBy.name}</Link> {item.postedBy._id === state._id 
-    &&<Link to='/'> <i className="material-icons" style={{
-        float:"right"
-    }} 
-    onClick={()=>deleteMessage(item._id)}>delete</i></Link>} 
-    </h5>
-<h5>{item.postedBy.name}</h5>
-<div className="message">
-<h4>{item.title}</h4>
-<p>{item.body}</p>
-<form className="row" onSubmit={(e)=>{
-    e.preventDefault()
-    reply(messageReply,item._id)
-}}>
-<input value={messageReply} onChange={(e)=>setReply(e.target.value)} className="col s10" type="text" placeholder="send a reply...."/>
-<Link onClick={()=>reply(messageReply,item._id)} to="/"><i className="material-icons col s2">send</i></Link>
-</form>
-{
-    item.replys.map(record=>{
-        return(
-        <h6 key={record._id}><span style={{fontWeight:"500"}}>{record.postedBy.name}</span> {record.text}</h6>
-        )
-    })
-}
-</div>
-</div>)})}
+<Message item={item} updateMessage={updateMessage} deleteMessage={deleteMessage}  state={state}    setBody={setBody}  setTitle={setTitle} title={title} body={body} data={data} setData={setData}  key={item._id}/>
+        )})}
 </div>    
 );
 }

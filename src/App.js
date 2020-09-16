@@ -1,33 +1,34 @@
-import React,{useEffect,createContext,useReducer,useContext} from 'react';
-import NavBar from './components/Navbar'
-import "./App.css"
-import {BrowserRouter,Route,Switch,useHistory} from 'react-router-dom'
-import Home from './components/screens/Home'
-import Login from './components/screens/Login'
-import Signup from './components/screens/Signup'
-import NewMessage from './components/screens/NewMessage'
-import {reducer,initialState} from './reducers/userReducer'
-import Profile from './components/screens/Profile'
+import React,{useEffect,createContext,useReducer,useContext, useState} from 'react';
+import NavBar from './components/Navbar';
+import "./App.css";
+import {BrowserRouter,Route,Switch,useHistory} from 'react-router-dom';
+import Home from './components/screens/Home';
+import Login from './components/screens/Login';
+import Signup from './components/screens/Signup';
+import NewMessage from './components/screens/NewMessage';
+import {reducer,initialState} from './reducers/userReducer';
+import Profile from './components/screens/Profile';
 
-export const UserContext = createContext()
-
+export const UserContext = createContext();
 
 const Routing = ()=>{
   const history = useHistory()
   const {dispatch} = useContext(UserContext)
+const [message,setMessage] = useState({});
+  
   useEffect(()=>{
     const user = JSON.parse(localStorage.getItem("user"))
     if(user){
       dispatch({type:"USER",payload:user})
     }else{
-      if(!history.location.pathname.startsWith('/reset'))
-           history.push('/login')
+       history.push('/login')
     }
-  },[]);
+  },[dispatch,history]);
+
   return(
     <Switch>
       <Route exact path="/" >
-      <Home />
+      <Home passMessage={setMessage}/>
       </Route>
       <Route path="/login">
         <Login />
@@ -35,7 +36,7 @@ const Routing = ()=>{
       <Route path="/signup">
         <Signup />
       </Route>
-      <Route exact path="/profile">
+      <Route message={message} exact path="/profile">
         <Profile />
       </Route>
       <Route path="/new-message">
@@ -52,7 +53,6 @@ function App() {
     <BrowserRouter>
       <NavBar />
       <Routing />
-      
     </BrowserRouter>
     </UserContext.Provider>
   );

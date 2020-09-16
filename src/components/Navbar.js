@@ -7,9 +7,8 @@ const Navbar = ()=>{
    const renderList = ()=>{
     if(state){
         return [
-          <li  key="1"><Link  to="/profile">MyMessages</Link></li>,
-          <li  key="2"><Link to="/new-message">Create</Link></li>,
-          <li  key="5">
+          <li  key="1"><Link to="/new-message">Create</Link></li>,
+          <li  key="2">
           <Link to="/login"
          onClick={()=>{
            localStorage.clear()
