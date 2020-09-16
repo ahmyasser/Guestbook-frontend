@@ -1,9 +1,10 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState, useEffect, useContext} from 'react';
+import {UserContext} from '../../App'
 import { Link } from 'react-router-dom';
 const Home = ()=>{
     const [data,setData] = useState([]);
     const [messageReply,setReply] = useState("")
-
+    const {state} = useContext(UserContext)
     useEffect(()=>{
        fetch('/posts',{
            headers:{
@@ -41,6 +42,21 @@ const Home = ()=>{
             console.log(err)
         })
   }
+  const deleteMessage = (messageid)=>{
+    fetch(`/post/${messageid}`,{
+        method:"delete",
+        headers:{
+            Authorization:"Bearer "+localStorage.getItem("jwt")
+        }
+    }).then(res=>res.json())
+    .then(result=>{
+        console.log(result)
+        const newData = data.filter(item=>{
+            return item._id !== result._id
+        })
+        setData(newData)
+    })
+}
 
     return(
 <div className="home">
@@ -48,6 +64,12 @@ const Home = ()=>{
     data.map(item=>{
         return(
 <div className="card home-card" key={item._id}>
+<h5 style={{padding:"5px"}}><Link to={item.postedBy._id !== state._id?"/profile/"+item.postedBy._id :"/profile"  }>{item.postedBy.name}</Link> {item.postedBy._id === state._id 
+    &&<Link to='/'> <i className="material-icons" style={{
+        float:"right"
+    }} 
+    onClick={()=>deleteMessage(item._id)}>delete</i></Link>} 
+    </h5>
 <h5>{item.postedBy.name}</h5>
 <div className="message">
 <h4>{item.title}</h4>
