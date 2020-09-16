@@ -1,7 +1,9 @@
 import React,{useState, useEffect} from 'react';
-//import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 const Home = ()=>{
-    const [data,setData] = useState([])
+    const [data,setData] = useState([]);
+    const [messageReply,setReply] = useState("")
+
     useEffect(()=>{
        fetch('/posts',{
            headers:{
@@ -50,12 +52,20 @@ const Home = ()=>{
 <div className="message">
 <h4>{item.title}</h4>
 <p>{item.body}</p>
-<form onSubmit={(e)=>{
+<form className="row" onSubmit={(e)=>{
     e.preventDefault()
-    reply(e.target[0].value,item._id)
+    reply(messageReply,item._id)
 }}>
-<input className="col s10" type="text" placeholder="send a reply...."/>
+<input value={messageReply} onChange={(e)=>setReply(e.target.value)} className="col s10" type="text" placeholder="send a reply...."/>
+<Link onClick={()=>reply(messageReply,item._id)} to="/"><i className="material-icons col s2">send</i></Link>
 </form>
+{
+    item.replys.map(record=>{
+        return(
+        <h6 key={record._id}><span style={{fontWeight:"500"}}>{record.postedBy.name}</span> {record.text}</h6>
+        )
+    })
+}
 </div>
 </div>)})}
 </div>    
